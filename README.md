@@ -1,46 +1,46 @@
 # DCTB 内部工具入口（dashboard.dctb.my）
 
-一个统一登入入口：登入后显示所有内部 dashboard 的选单，点击跳转到对应的子域名。
+架构（v2）：单一 Clerk 登入门槛，所有内部工具都是这个 App 内部的路由（react-router），
+不管访问哪个路径都逃不出登入检查 —— 不再有"子域名 / 独立静态文件不受保护"的漏洞。
 
-## Step 1 — 建 GitHub Repo
-
-新建一个 repo，比如叫 `dctb-portal`，把这个文件夹里所有文件上传上去（保持结构不变）。
-
-## Step 2 — 连 Vercel
-
-跟你其他项目一样：Add New → Project → 选这个 repo → Deploy。
-
-## Step 3 — 设置环境变量
-
-**复用你已经建好的 Clerk application（DCTB Review Generator）**：
-1. 去 Clerk 后台 → Configure → API Keys，复制 Publishable Key（`pk_test_...`）
-2. Vercel 这个 project → Settings → Environment Variables，新增：
-   - Name: `VITE_CLERK_PUBLISHABLE_KEY`
-   - Value: 刚复制的 key
-
-## Step 4 — 接子域名
-
-Vercel 这个 project → Settings → Domains → 输入 `dashboard.dctb.my` → Add，
-拿到 CNAME 值后，去 Exabytes DNS 管理加一条 CNAME 记录（跟 review.dctb.my 一模一样的流程）。
-
-## Step 5 — 之后要新增 dashboard 时
-
-打开 `src/App.jsx`，在 `TOOLS` 这个数组里加一个新项目：
-
-```js
-{
-  id: "xxx",
-  label: "新工具名字",
-  desc: "简短描述",
-  url: "https://xxx.dctb.my",
-  icon: 某个 lucide-react 图标,
-  ready: true,
-}
+```
+dashboard.dctb.my/          → 选单首页
+dashboard.dctb.my/apogo     → APO GO 订阅看板（已迁移进来，受保护）
+dashboard.dctb.my/sales     → 待迁移（目前 TOOLS 里 ready: false）
+dashboard.dctb.my/ads       → 待迁移（目前 TOOLS 里 ready: false）
 ```
 
-存档、push 到 GitHub，Vercel 会自动重新部署。
+review.dctb.my 目前还是独立子域名、独立开放访问（不经过这个登入），
+在 `src/pages/Menu.jsx` 的 `TOOLS` 数组里用 `external` 字段标记。
+
+## 部署
+
+跟原本一样：GitHub push → Vercel 自动部署。
+
+**这次多了一个重要文件：`vercel.json`**（SPA fallback，让 `/apogo` 这种路径不会 404，
+一律先交给 index.html，由 react-router 接手判断要显示哪个页面）。一定要连同其他文件
+一起上传，否则刷新 `/apogo` 页面会出现 404。
+
+环境变量、Clerk 设置都不用重新做，沿用原本的 `VITE_CLERK_PUBLISHABLE_KEY`。
+
+## 之后要加新工具时（两种情况）
+
+### 情况 A：像 APO GO 一样，是纯 HTML/CSS/JS 写的（没有用 React/Vite 打包）
+
+1. 把整份 HTML 存成 `src/pages/xxx-content.html`
+2. 建一个 `src/pages/Xxx.jsx`，照抄 `ApoGo.jsx` 的写法（import 那份 html，塞进
+   `<iframe srcDoc={...}>`）
+3. 在 `App.jsx` 里加一行 `<Route path="/xxx" element={<Xxx />} />`
+4. 在 `Menu.jsx` 的 `TOOLS` 数组里加一个新项目（`ready: true`，`path: "/xxx"`，
+   不要加 `external`）
+
+### 情况 B：是用 React/Vite 写的独立项目（像 Sales、Ads 现在这样）
+
+这个复杂一些，需要把该项目的代码合并进这个 repo 里（变成一个子路由），或维持独立
+部署但改走"反向代理"。两种做法都有对应的坑（资源路径、构建冲突等），届时再个别讨论。
 
 ## 现在的状态
 
-- `review.dctb.my` — 已经上线，可以直接点
-- `sales.dctb.my` / `ads.dctb.my` — 还没接子域名，先显示"即将上线"，等接好后把对应的 `ready` 改成 `true`
+- APO GO — ✅ 已迁移，受保护
+- Sales / Ads — 待迁移（React/Vite 项目，属于情况 B）
+- Review Generator — 暂时维持独立子域名（review.dctb.my），不受这层登入保护
