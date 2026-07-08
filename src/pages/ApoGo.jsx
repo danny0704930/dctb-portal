@@ -14,7 +14,7 @@ export default function ApoGo() {
       <iframe
         title="APO GO Subscription Dashboard"
         srcDoc={apogoHtml}
-        style={{ width: "100%", height: "100%", border: "none", display: "block" }}
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: "none" }}
         sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
       />
     </ToolFrame>
