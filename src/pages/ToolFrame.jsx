@@ -8,10 +8,10 @@ import { T } from "../theme";
 // runs in total isolation without fighting the portal's Tailwind styles.
 export default function ToolFrame({ title, children }) {
   return (
-    <div className="min-h-screen w-full flex flex-col" style={{ background: T.ink }}>
+    <div style={{ height: "100vh", display: "flex", flexDirection: "column", background: T.ink }}>
       <div
         className="flex items-center gap-3 px-4 py-3"
-        style={{ borderBottom: "1px solid rgba(255,255,255,0.08)", background: T.card }}
+        style={{ borderBottom: "1px solid rgba(255,255,255,0.08)", background: T.card, flexShrink: 0 }}
       >
         <Link
           to="/"
@@ -29,7 +29,7 @@ export default function ToolFrame({ title, children }) {
         <span style={{ color: "rgba(255,255,255,0.15)" }}>|</span>
         <span style={{ fontFamily: T.body, fontSize: 13, fontWeight: 700, color: T.porcelain }}>{title}</span>
       </div>
-      <div style={{ flex: 1, minHeight: 0 }}>{children}</div>
+      <div style={{ flex: 1, position: "relative" }}>{children}</div>
     </div>
   );
 }
