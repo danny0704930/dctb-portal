@@ -26,10 +26,16 @@ const TOOLS = [
     ready: false, // flip to true once sales.dctb.my is wired up
   },
   {
+    id: "apogo",
+    label: "APO GO 订阅看板",
+    desc: "APO / COCO 订阅数据总览",
+    url: "/apogo",
+    icon: BarChart3,
+    ready: true,
+  },
+  {
     id: "ads",
-    label: "Ads Dashboard",
-    desc: "Meta Ads 投放成效与预算分析",
-    url: "https://ads.dctb.my",
+    ...
     icon: Megaphone,
     ready: false, // flip to true once ads.dctb.my is wired up
   },
