@@ -57,7 +57,7 @@ export const TOOLS = [
     desc: "AI 评价文案生成工具（客户端 QR 用）",
     path: "/review",
     icon: MessageSquareText,
-    ready: false, // still a separate subdomain (review.dctb.my) for now
+    ready: true,
     external: "https://review.dctb.my",
   },
 ];
