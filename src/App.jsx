@@ -4,6 +4,8 @@ import { Lightbulb } from "lucide-react";
 import { T } from "./theme";
 import Menu from "./pages/Menu";
 import ApoGo from "./pages/ApoGo";
+import DctbSmartHome from "./pages/DctbSmartHome";
+import Wellskin from "./pages/Wellskin";
 
 // Single, app-wide auth gate. Whatever path the browser is on (/, /apogo,
 // and any future internal tool route), an unauthenticated visitor only ever
@@ -38,6 +40,8 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Menu />} />
           <Route path="/apogo" element={<ApoGo />} />
+          <Route path="/smarthome" element={<DctbSmartHome />} />
+          <Route path="/wellskin" element={<Wellskin />} />
           {/* Add new internal tools here as they're migrated in, e.g.:
               <Route path="/sales" element={<Sales />} /> */}
         </Routes>
