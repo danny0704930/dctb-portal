@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { UserButton } from "@clerk/clerk-react";
-import { BarChart3, Megaphone, MessageSquareText, Lightbulb, ArrowUpRight } from "lucide-react";
+import { BarChart3, Megaphone, MessageSquareText, Lightbulb, ArrowUpRight, Home, Sparkles } from "lucide-react";
 import { T } from "../theme";
 
 // Add a new tool here any time you spin up a new dashboard.
@@ -33,6 +33,22 @@ export const TOOLS = [
     desc: "APO / COCO 订阅数据总览",
     path: "/apogo",
     icon: BarChart3,
+    ready: true,
+  },
+  {
+    id: "smarthome",
+    label: "DCTB Smart Home 零售看板",
+    desc: "门市 + 线上销售、销售员业绩总览",
+    path: "/smarthome",
+    icon: Home,
+    ready: true,
+  },
+  {
+    id: "wellskin",
+    label: "Wellskin 销售看板",
+    desc: "销售数据、客户回购分析 + AI 助手",
+    path: "/wellskin",
+    icon: Sparkles,
     ready: true,
   },
   {
